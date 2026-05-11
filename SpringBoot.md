@@ -378,3 +378,98 @@ Pagination is implemented using the **Pageable interface**, and repository metho
 Entity auditing can be implemented using annotations like **@CreatedDate and @LastModifiedDate** along with **@EntityListeners** to automatically track creation and update timestamps.
 
 ---
+In a Spring Boot interview, the interviewer wants to see if you understand the "magic" happening under the hood. Here are several scenario-based questions focusing on IoC and DI.
+
+---
+
+### 1. The "Circular Dependency" Dilemma
+
+**Scenario:** You have `ServiceA` which requires `ServiceB` in its constructor, and `ServiceB` requires `ServiceA` in its constructor. What happens when you start the application?
+
+**Answer:** Spring will throw a `BeanCurrentlyInCreationException` at startup because it cannot decide which bean to create first.
+
+* **The Fix:**
+1. **Redesign:** The best approach is to extract the common logic into a `ServiceC`.
+2. **@Lazy:** Annotate one of the constructor arguments with `@Lazy`. This tells Spring to inject a proxy first and only initialize the actual bean when it’s first used.
+3. **Setter Injection:** Switch from constructor to setter injection, though this is less preferred as it allows partially initialized objects.
+
+
+
+---
+
+### 2. The "Multiple Implementation" Conflict
+
+**Scenario:** You have an interface `PaymentService` and two implementations: `PaypalService` and `StripeService`. If you use `@Autowired private PaymentService paymentService;`, what happens?
+
+**Answer:** Spring will throw a `NoUniqueBeanDefinitionException` because it doesn't know which one to pick.
+
+* **The Fix:**
+1. **@Primary:** Mark one implementation as the default.
+2. **@Qualifier("stripeService"):** Use this at the injection point to specify the exact bean name.
+3. **Variable Name:** Spring uses "autowiring by name" as a fallback. If you name the variable `private PaymentService stripeService;`, it will match the `StripeService` bean.
+
+
+
+---
+
+### 3. The Singleton Scope "State" Trap
+
+**Scenario:** A developer creates a `UserSession` bean (Default Scope: Singleton) to store a user's login info. In a web app with 100 concurrent users, what goes wrong?
+
+**Answer:** All 100 users will share the same instance of `UserSession`. If User A logs in, User B will see User A's data.
+
+* **The Fix:** Change the bean scope to **Session Scope** (`@Scope(value = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)`). This ensures every user gets their own unique instance.
+
+---
+
+### 4. Injecting Prototype into Singleton
+
+**Scenario:** You have a Singleton bean (created once) that needs a Prototype bean (should be created every time it's used). If you simply `@Autowired` the Prototype bean into the Singleton, will you get a new instance every time you call a method in the Singleton?
+
+**Answer:** **No.** The Prototype bean is injected only **once** when the Singleton is created. After that, the Singleton keeps using that same initial instance.
+
+* **The Fix:**
+1. **Lookup Injection:** Use the `@Lookup` annotation on a method to return the Prototype bean.
+2. **ObjectFactory:** Inject an `ObjectFactory<PrototypeBean>` and call `.getObject()` whenever a new instance is needed.
+
+
+
+---
+
+### 5. Runtime Configuration vs. @Component
+
+**Scenario:** You are using a 3rd-party library class (e.g., `Gson` or `RestTemplates`) that is not annotated with `@Component`. How do you make it available for Dependency Injection in your service?
+
+**Answer:** You cannot modify the library code to add `@Component`, so you must use a **Configuration Class**.
+
+* **The Implementation:**
+```java
+@Configuration
+public class AppConfig {
+    @Bean
+    public Gson gson() {
+        return new Gson(); // Manually instantiate and return it
+    }
+}
+
+```
+
+
+Now, Spring will manage this `Gson` instance and allow you to `@Autowired` it anywhere.
+
+---
+
+### 6. The "Missing Bean" during Testing
+
+**Scenario:** You are writing a Unit Test for `OrderService`, but the test fails because it can't find the `DatabaseRepository` bean. You don't want to start the whole database for a unit test. What do you do?
+
+**Answer:** Use **Mocking**.
+
+* If using `@SpringBootTest`, use `@MockBean` to create a mock version of the repository and add it to the ApplicationContext.
+* If doing a pure Unit Test (no Spring context), use Constructor Injection to manually pass a Mockito mock into the `OrderService` constructor.
+
+Does one of these scenarios mirror a specific problem you've encountered in a codebase recently?
+
+```</PrototypeBean>
+
+```
