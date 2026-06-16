@@ -1,5 +1,220 @@
 
 ---
+# Spring Boot JPA Guides
+
+The powerful persistence framework for Java applications, focused on productivity, maintainability, and enterprise-grade data access.
+
+## Overview
+
+### Full-Featured ORM
+
+* Object-Relational Mapping via JPA/Hibernate
+* Entity lifecycle management
+* Automatic dirty checking
+* First-level cache (Persistence Context)
+* Optional second-level caching
+
+### Entity Mapping
+
+* `@Entity`, `@Table`
+* `@Column`, `@Transient`
+* Embedded objects (`@Embeddable`)
+* Composite Keys (`@EmbeddedId`, `@IdClass`)
+* Inheritance Mapping
+
+  * Single Table
+  * Joined
+  * Table Per Class
+* Enum Mapping
+
+### Associations
+
+* One-To-One (`@OneToOne`)
+* One-To-Many (`@OneToMany`)
+* Many-To-One (`@ManyToOne`)
+* Many-To-Many (`@ManyToMany`)
+* Bidirectional Relationships
+* Cascade Operations
+* Orphan Removal
+* Fetch Strategies (Lazy/Eager)
+
+### Repository Abstraction
+
+* `JpaRepository`
+* `CrudRepository`
+* `PagingAndSortingRepository`
+* Custom Repository Implementations
+* Generic Repositories
+* Specifications API
+
+### Query Capabilities
+
+* Derived Query Methods
+* JPQL Queries
+* Native SQL Queries
+* Named Queries
+* Dynamic Queries
+* Criteria API
+* Specifications
+* Query by Example (QBE)
+* Projections
+* DTO Mapping
+
+### Fetching & Performance
+
+* Fetch Joins
+* Entity Graphs
+* Batch Fetching
+* Pagination
+* Sorting
+* Slice Queries
+* Streaming Results
+* N+1 Problem Optimization
+
+### Transactions
+
+* Declarative Transactions (`@Transactional`)
+* Programmatic Transactions
+* Propagation Levels
+* Isolation Levels
+* Rollback Rules
+* Read-Only Transactions
+
+### Auditing
+
+* Created Date
+* Last Modified Date
+* Created By
+* Modified By
+* Auditing Entity Listener
+
+### Lifecycle Events
+
+* `@PrePersist`
+* `@PostPersist`
+* `@PreUpdate`
+* `@PostUpdate`
+* `@PreRemove`
+* `@PostRemove`
+* `@PostLoad`
+
+### Concurrency Control
+
+* Optimistic Locking (`@Version`)
+* Pessimistic Locking
+* Lock Modes
+* Transaction Isolation
+
+### Batch Operations
+
+* Batch Inserts
+* Batch Updates
+* Bulk Deletes
+* Bulk Updates
+* JDBC Batching
+
+### Database Features
+
+* Schema Generation
+* DDL Auto Management
+* Sequences
+* Identity Columns
+* UUID Support
+* Stored Procedures
+* Database Functions
+
+### Validation
+
+* Bean Validation
+* `@NotNull`
+* `@Size`
+* `@Email`
+* Custom Validators
+* Validation Groups
+
+### Caching
+
+* First-Level Cache
+* Second-Level Cache
+* Query Cache
+* Redis Integration
+* Ehcache/Caffeine Support
+
+### Multi-Database Support
+
+* Multiple DataSources
+* Read/Write Separation
+* Multi-Tenancy
+* Dynamic Routing
+
+### Testing Support
+
+* `@DataJpaTest`
+* Embedded Databases
+* Testcontainers
+* Repository Testing
+* Transaction Rollback Testing
+
+### Migrations
+
+* Flyway Integration
+* Liquibase Integration
+* Versioned Database Changes
+
+### Monitoring & Debugging
+
+* SQL Logging
+* Hibernate Statistics
+* Query Analysis
+* Spring Boot Actuator Metrics
+
+### Spring Boot Integration
+
+* Auto Configuration
+* Dependency Injection
+* Profiles
+* Configuration Properties
+* Actuator
+* Spring Security Integration
+
+### Advanced Features
+
+* Soft Deletes
+* Entity Listeners
+* Custom Converters (`AttributeConverter`)
+* JSON Column Mapping
+* Database Views
+* Event Publishing
+* Domain Events
+
+### Extensibility
+
+* Hibernate Interceptors
+* Event Listeners
+* Custom Repository Base Classes
+* Spring AOP Integration
+* Custom Dialects
+
+---
+
+
+For learning purposes, recommend order:
+
+1. Entities & Relationships
+2. Repositories
+3. Derived Queries
+4. JPQL
+5. Transactions
+6. Fetch Joins & N+1 Problem
+7. Pagination & Sorting
+8. Specifications
+9. Auditing
+10. Locking
+11. Caching
+12. Multi-tenancy / Advanced Hibernate
+
+That sequence covers about 90% of what you'll use in real-world Spring Boot applications.
+
 
 # JPA Interview Questions List
 
