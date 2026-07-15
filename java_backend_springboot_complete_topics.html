@@ -1,0 +1,483 @@
+
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font-sans); }
+  .wrap { padding: 1rem 0 2rem; }
+  h2 { font-size: 18px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 4px; }
+  .sub { font-size: 13px; color: var(--color-text-secondary); margin-bottom: 1.25rem; }
+
+  /* tabs */
+  .tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 1.25rem; }
+  .tab { font-size: 12px; font-weight: 500; padding: 5px 12px; border-radius: 20px; border: 1.5px solid var(--color-border-tertiary); background: var(--color-background-secondary); color: var(--color-text-secondary); cursor: pointer; transition: all 0.15s; }
+  .tab.active { border-color: transparent; color: #fff; }
+  .tab:hover:not(.active) { border-color: var(--color-border-primary); }
+
+  /* section */
+  .section { display: none; }
+  .section.active { display: block; }
+  .section-title { font-size: 15px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 4px; }
+  .section-desc { font-size: 12px; color: var(--color-text-secondary); margin-bottom: 1rem; }
+
+  /* topic grid */
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+  @media(max-width:500px){ .grid { grid-template-columns: 1fr; } }
+
+  .card { border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary); padding: 0.75rem 1rem; background: var(--color-background-secondary); cursor: pointer; transition: border-color 0.15s; }
+  .card:hover { border-color: var(--color-border-primary); }
+  .card-title { font-size: 13px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 5px; }
+  .tags { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 6px; }
+  .tag { font-size: 10px; padding: 1px 7px; border-radius: 10px; font-weight: 500; }
+  .tag-must { background: #FAECE7; color: #993C1D; }
+  .tag-senior { background: #EEEDFE; color: #534AB7; }
+  .tag-common { background: #E1F5EE; color: #0F6E56; }
+  .tag-modern { background: #FAEEDA; color: #854F0B; }
+  @media(prefers-color-scheme:dark){
+    .tag-must{background:#4A1B0C;color:#F5C4B3;}
+    .tag-senior{background:#26215C;color:#CECBF6;}
+    .tag-common{background:#04342C;color:#9FE1CB;}
+    .tag-modern{background:#412402;color:#FAC775;}
+  }
+  .topics { font-size: 12px; color: var(--color-text-secondary); line-height: 1.7; }
+
+  /* tab accent colors */
+  .t0.active { background: #AFA9EC; }
+  .t1.active { background: #5DCAA5; }
+  .t2.active { background: #EF9F27; }
+  .t3.active { background: #F0997B; }
+  .t4.active { background: #85B7EB; }
+  .t5.active { background: #ED93B1; }
+  .t6.active { background: #8FCB7E; }
+  .t7.active { background: #A8C7F0; }
+</style>
+
+<div class="wrap">
+  <h2>Java + Spring Boot — complete backend dev topic list</h2>
+  <p class="sub">8 pillars · click a tab to explore · click a card to go deep</p>
+
+  <div class="tabs">
+    <div class="tab t0 active" onclick="show(0)">☕ Core Java</div>
+    <div class="tab t1" onclick="show(1)">🧵 Concurrency</div>
+    <div class="tab t2" onclick="show(2)">🌱 Spring Core</div>
+    <div class="tab t3" onclick="show(3)">🌐 REST & MVC</div>
+    <div class="tab t4" onclick="show(4)">🗄️ Data & JPA</div>
+    <div class="tab t5" onclick="show(5)">🔐 Security</div>
+    <div class="tab t6" onclick="show(6)">📬 Messaging</div>
+    <div class="tab t7" onclick="show(7)">🚀 Production</div>
+  </div>
+
+  <!-- TAB 0: Core Java -->
+  <div class="section active" id="s0">
+    <div class="section-title">Core Java</div>
+    <div class="section-desc">Everything that sits below the framework — asked at every level</div>
+    <div class="grid">
+      <div class="card" onclick="sendPrompt('Explain Java OOP concepts: encapsulation, inheritance, polymorphism, abstraction with real examples and pitfalls')">
+        <div class="card-title">OOP fundamentals</div>
+        <div class="tags"><span class="tag tag-must">must know</span></div>
+        <div class="topics">Encapsulation, inheritance, polymorphism, abstraction · abstract class vs interface · composition vs inheritance · SOLID principles</div>
+      </div>
+      <div class="card" onclick="sendPrompt('Explain Java data types, String pool, immutability, pass-by-value semantics and common pitfalls')">
+        <div class="card-title">Types, Strings & immutability</div>
+        <div class="tags"><span class="tag tag-must">must know</span></div>
+        <div class="topics">Primitives vs wrappers · autoboxing traps · String pool · String vs StringBuilder vs StringBuffer · immutable objects · == vs equals vs hashCode contract</div>
+      </div>
+      <div class="card" onclick="sendPrompt('Explain Java Collections framework internals: HashMap, LinkedHashMap, TreeMap, ConcurrentHashMap, List, Set, Queue')">
+        <div class="card-title">Collections framework</div>
+        <div class="tags"><span class="tag tag-must">must know</span><span class="tag tag-senior">senior</span></div>
+        <div class="topics">HashMap internals (buckets, treeify at 8) · LinkedHashMap · TreeMap · HashSet · ConcurrentHashMap · ArrayDeque · fail-fast vs fail-safe · Comparable vs Comparator</div>
+      </div>
+      <div class="card" onclick="sendPrompt('Explain Java 8 features: streams, lambdas, Optional, functional interfaces, method references with all operators')">
+        <div class="card-title">Streams & functional programming</div>
+        <div class="tags"><span class="tag tag-must">must know</span></div>
+        <div class="topics">Intermediate ops (map, filter, flatMap, sorted, distinct, peek) · terminal ops (collect, reduce, count, findAny) · Collectors · Optional · method refs · lazy evaluation</div>
+      </div>
+      <div class="card" onclick="sendPrompt('Explain Java exception handling: checked vs unchecked, try-with-resources, custom exceptions, best practices')">
+        <div class="card-title">Exception handling</div>
+        <div class="tags"><span class="tag tag-must">must know</span></div>
+        <div class="topics">Checked vs unchecked · try-with-resources (AutoCloseable) · custom exceptions · exception chaining · multi-catch · finally semantics · anti-patterns</div>
+      </div>
+      <div class="card" onclick="sendPrompt('Explain Java generics: type erasure, wildcards, bounded type parameters, PECS, generic methods')">
+        <div class="card-title">Generics</div>
+        <div class="tags"><span class="tag tag-common">common</span></div>
+        <div class="topics">Type erasure · unbounded/bounded wildcards (? extends, ? super) · PECS rule · generic methods · raw types pitfalls</div>
+      </div>
+      <div class="card" onclick="sendPrompt('Explain Java reflection, annotations, and how frameworks like Spring use them internally')">
+        <div class="card-title">Reflection & annotations</div>
+        <div class="tags"><span class="tag tag-senior">senior</span></div>
+        <div class="topics">Class, Method, Field reflection · getDeclaredFields vs getFields · custom annotation creation · retention policies · how Spring reads annotations · performance implications</div>
+      </div>
+      <div class="card" onclick="sendPrompt('Explain Java I/O: streams, NIO, buffers, channels, serialization, and file handling')">
+        <div class="card-title">I/O & NIO</div>
+        <div class="tags"><span class="tag tag-common">common</span></div>
+        <div class="topics">InputStream/OutputStream vs Reader/Writer · NIO (ByteBuffer, Channel, Selector) · Files utility class · serialization/deserialization pitfalls · Path API</div>
+      </div>
+      <div class="card" onclick="sendPrompt('Explain Java design patterns: creational, structural, behavioral with Spring Boot examples')">
+        <div class="card-title">Design patterns</div>
+        <div class="tags"><span class="tag tag-must">must know</span></div>
+        <div class="topics">Singleton · Factory/AbstractFactory · Builder · Prototype · Adapter · Decorator · Proxy · Strategy · Observer · Template Method · Command · Chain of Responsibility</div>
+      </div>
+      <div class="card" onclick="sendPrompt('What are modern Java features from Java 9 to 21: records, sealed classes, pattern matching, text blocks, var')">
+        <div class="card-title">Modern Java (9–21)</div>
+        <div class="tags"><span class="tag tag-modern">modern</span><span class="tag tag-senior">senior</span></div>
+        <div class="topics">Records · sealed classes · pattern matching (instanceof, switch) · text blocks · var · modules (JPMS) · switch expressions · virtual threads (Java 21) · SequencedCollection</div>
+      </div>
+      <div class="card" onclick="sendPrompt('Explain JVM internals: class loading, JIT compilation, metaspace, bytecode')">
+        <div class="card-title">JVM internals</div>
+        <div class="tags"><span class="tag tag-senior">senior</span></div>
+        <div class="topics">Class loading (bootstrap/ext/app) · bytecode · JIT tiers (C1/C2) · HotSpot optimizations · metaspace · stack frames · native methods</div>
+      </div>
+      <div class="card" onclick="sendPrompt('Explain Java garbage collection: GC algorithms, G1GC, ZGC, tuning flags, and diagnosing memory leaks')">
+        <div class="card-title">Garbage collection</div>
+        <div class="tags"><span class="tag tag-senior">senior</span></div>
+        <div class="topics">Generational GC · G1GC phases (young/mixed/full) · ZGC & Shenandoah (low-pause) · GC tuning flags · heap dump analysis · WeakReference/SoftReference · memory leaks</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 1: Concurrency -->
+  <div class="section" id="s1">
+    <div class="section-title">Concurrency & multithreading</div>
+    <div class="section-desc">The deepest rabbit hole — expect live coding at senior level</div>
+    <div class="grid">
+      <div class="card" onclick="sendPrompt('Explain Java memory model, happens-before, visibility, atomicity, volatile, and instruction reordering')">
+        <div class="card-title">Java Memory Model</div>
+        <div class="tags"><span class="tag tag-senior">senior</span></div>
+        <div class="topics">Happens-before relationship · visibility vs atomicity · volatile guarantees · instruction reordering · memory barriers · double-checked locking bug</div>
+      </div>
+      <div class="card" onclick="sendPrompt('Explain thread lifecycle, creating threads, Runnable vs Callable, daemon threads')">
+        <div class="card-title">Thread lifecycle & creation</div>
+        <div class="tags"><span class="tag tag-must">must know</span></div>
+        <div class="topics">NEW/RUNNABLE/BLOCKED/WAITING/TIMED_WAITING/TERMINATED · Runnable vs Callable · daemon threads · thread naming · UncaughtExceptionHandler</div>
+      </div>
+      <div class="card" onclick="sendPrompt('Explain synchronized, ReentrantLock, ReadWriteLock, StampedLock — when to use each')">
+        <div class="card-title">Locks & synchronization</div>
+        <div class="tags"><span class="tag tag-must">must know</span></div>
+        <div class="topics">Intrinsic locks · ReentrantLock (tryLock, fairness) · ReadWriteLock · StampedLock optimistic reads · lock ordering · object vs class level locks</div>
+      </div>
+      <div class="card" onclick="sendPrompt('Explain ThreadPoolExecutor parameters, thread pool sizing formula, rejection policies')">
+        <div class="card-title">Thread pools & Executor</div>
+        <div class="tags"><span class="tag tag-must">must know</span></div>
+        <div class="topics">ExecutorService types · ThreadPoolExecutor (coreSize/maxSize/queue/keepAlive) · RejectedExecutionHandler policies · CPU-bound vs I/O-bound sizing · graceful shutdown</div>
+      </div>
+      <div class="card" onclick="sendPrompt('Explain CompletableFuture: chaining, combining, exception handling, async variants and thread pool usage')">
+        <div class="card-title">CompletableFuture</div>
+        <div class="tags"><span class="tag tag-must">must know</span></div>
+        <div class="topics">thenApply/thenApplyAsync · thenCombine · allOf/anyOf · exceptionally/handle · whenComplete · timeout · difference from Future</div>
+      </div>
+      <div class="card" onclick="sendPrompt('Explain ConcurrentHashMap, CopyOnWriteArrayList, BlockingQueue implementations and when to use each')">
+        <div class="card-title">Concurrent collections</div>
+        <div class="tags"><span class="tag tag-must">must know</span></div>
+        <div class="topics">ConcurrentHashMap internals · CopyOnWriteArrayList trade-offs · ArrayBlockingQueue/LinkedBlockingQueue/SynchronousQueue · ConcurrentLinkedQueue · fail-fast vs fail-safe</div>
+      </div>
+      <div class="card" onclick="sendPrompt('Explain AtomicInteger, CAS, ABA problem, LongAdder — when atomics win over locks')">
+        <div class="card-title">Atomic variables & CAS</div>
+        <div class="tags"><span class="tag tag-common">common</span></div>
+        <div class="topics">AtomicInteger/Long/Reference · Compare-And-Swap · ABA problem → AtomicStampedReference · LongAdder vs AtomicLong under contention</div>
+      </div>
+      <div class="card" onclick="sendPrompt('Explain CountDownLatch, CyclicBarrier, Semaphore, Phaser, Exchanger with real use cases')">
+        <div class="card-title">Coordination utilities</div>
+        <div class="tags"><span class="tag tag-common">common</span></div>
+        <div class="topics">CountDownLatch vs CyclicBarrier · Semaphore (rate limiting, connection pools) · Phaser (multi-phase tasks) · Exchanger</div>
+      </div>
+      <div class="card" onclick="sendPrompt('Explain deadlock, livelock, starvation — how to detect and prevent each')">
+        <div class="card-title">Deadlock, livelock & starvation</div>
+        <div class="tags"><span class="tag tag-must">must know</span></div>
+        <div class="topics">Coffman conditions · lock ordering prevention · tryLock timeout · jstack/thread dump analysis · livelock example · starvation with fair locks</div>
+      </div>
+      <div class="card" onclick="sendPrompt('Explain ThreadLocal: use cases, memory leak risks in thread pools, InheritableThreadLocal')">
+        <div class="card-title">ThreadLocal</div>
+        <div class="tags"><span class="tag tag-common">common</span></div>
+        <div class="topics">Use cases (per-thread context, DB connections) · memory leak in thread pools · remove() discipline · InheritableThreadLocal · Spring's RequestContextHolder usage</div>
+      </div>
+      <div class="card" onclick="sendPrompt('Explain Java 21 virtual threads and structured concurrency — how they differ from platform threads')">
+        <div class="card-title">Virtual threads (Java 21)</div>
+        <div class="tags"><span class="tag tag-modern">modern</span></div>
+        <div class="topics">M:N scheduling · thread pinning on synchronized · when NOT to use virtual threads · StructuredTaskScope · Spring Boot 3.2+ virtual thread support</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 2: Spring Core -->
+  <div class="section" id="s2">
+    <div class="section-title">Spring Core & Spring Boot</div>
+    <div class="section-desc">The framework layer — expected to know deeply at any Spring role</div>
+    <div class="grid">
+      <div class="card" onclick="sendPrompt('Explain Spring IoC container, ApplicationContext vs BeanFactory, and bean lifecycle in detail')">
+        <div class="card-title">IoC container & bean lifecycle</div>
+        <div class="tags"><span class="tag tag-must">must know</span></div>
+        <div class="topics">BeanFactory vs ApplicationContext · bean lifecycle (instantiation → populate → init → use → destroy) · BeanPostProcessor · InitializingBean · @PostConstruct/@PreDestroy</div>
+      </div>
+      <div class="card" onclick="sendPrompt('Explain dependency injection types in Spring: constructor vs setter vs field injection, @Autowired, @Qualifier, @Primary')">
+        <div class="card-title">Dependency injection</div>
+        <div class="tags"><span class="tag tag-must">must know</span></div>
+        <div class="topics">Constructor vs setter vs field DI · @Autowired · @Qualifier · @Primary · circular dependency detection · why constructor injection is preferred</div>
+      </div>
+      <div class="card" onclick="sendPrompt('Explain Spring bean scopes: singleton, prototype, request, session, scoped proxies and thread-safety')">
+        <div class="card-title">Bean scopes</div>
+        <div class="tags"><span class="tag tag-must">must know</span></div>
+        <div class="topics">singleton/prototype/request/session/application · injecting prototype into singleton (scoped proxy) · thread-safety of stateful beans · custom scopes</div>
+      </div>
+      <div class="card" onclick="sendPrompt('How does Spring Boot auto-configuration work? @Conditional annotations, AutoConfiguration.imports, writing a custom starter')">
+        <div class="card-title">Auto-configuration</div>
+        <div class="tags"><span class="tag tag-senior">senior</span></div>
+        <div class="topics">@SpringBootApplication internals · @EnableAutoConfiguration · @ConditionalOnClass/Property/Bean · spring.factories → AutoConfiguration.imports · custom starters</div>
+      </div>
+      <div class="card" onclick="sendPrompt('Explain Spring AOP: JDK proxy vs CGLIB, advice types, @Transactional proxy, self-invocation trap')">
+        <div class="card-title">AOP & proxy internals</div>
+        <div class="tags"><span class="tag tag-senior">senior</span></div>
+        <div class="topics">JDK dynamic proxy vs CGLIB · @Aspect, @Pointcut · advice types (Before/After/Around/AfterThrowing) · self-invocation bypass problem · @Transactional proxy mechanism</div>
+      </div>
+      <div class="card" onclick="sendPrompt('Explain Spring profiles, externalized configuration, and exact property source precedence order')">
+        <div class="card-title">Profiles & configuration</div>
+        <div class="tags"><span class="tag tag-must">must know</span></div>
+        <div class="topics">@Profile · application.yml/properties · @ConfigurationProperties vs @Value · property precedence (CLI > env vars > jar > config file) · Spring Cloud Config</div>
+      </div>
+      <div class="card" onclick="sendPrompt('Explain @Async in Spring: how it works, thread pool config, exception handling, limitations')">
+        <div class="card-title">@Async & task execution</div>
+        <div class="tags"><span class="tag tag-common">common</span></div>
+        <div class="topics">@EnableAsync · @Async internals (proxy) · configuring TaskExecutor · exception handling (AsyncUncaughtExceptionHandler) · self-invocation limitation</div>
+      </div>
+      <div class="card" onclick="sendPrompt('Explain Spring events, ApplicationEventPublisher, synchronous vs async events')">
+        <div class="card-title">Spring events</div>
+        <div class="tags"><span class="tag tag-common">common</span></div>
+        <div class="topics">ApplicationEvent · @EventListener · @TransactionalEventListener · sync vs async dispatch · custom events · decoupling beans with events</div>
+      </div>
+      <div class="card" onclick="sendPrompt('What is new in Spring Boot 3.x: Jakarta EE, GraalVM native image, virtual threads, observability')">
+        <div class="card-title">Spring Boot 3.x features</div>
+        <div class="tags"><span class="tag tag-modern">modern</span></div>
+        <div class="topics">javax → jakarta namespace · GraalVM native compilation · AOT processing · virtual thread support · Micrometer Observation API · Spring Security 6 changes</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 3: REST & MVC -->
+  <div class="section" id="s3">
+    <div class="section-title">REST APIs & Spring MVC</div>
+    <div class="section-desc">Building and exposing HTTP services correctly</div>
+    <div class="grid">
+      <div class="card" onclick="sendPrompt('Walk through Spring MVC request lifecycle: DispatcherServlet, HandlerMapping, interceptors, view resolution')">
+        <div class="card-title">Spring MVC internals</div>
+        <div class="tags"><span class="tag tag-senior">senior</span></div>
+        <div class="topics">DispatcherServlet flow · HandlerMapping/HandlerAdapter · HandlerInterceptor vs Filter · content negotiation · MessageConverters (Jackson)</div>
+      </div>
+      <div class="card" onclick="sendPrompt('Explain REST best practices: HTTP methods, status codes, idempotency, versioning, HATEOAS')">
+        <div class="card-title">REST design best practices</div>
+        <div class="tags"><span class="tag tag-must">must know</span></div>
+        <div class="topics">HTTP verbs semantics · status code correctness · idempotency (GET/PUT/DELETE) · versioning strategies (URI/header/param) · HATEOAS · resource naming conventions</div>
+      </div>
+      <div class="card" onclick="sendPrompt('Explain @ControllerAdvice, @ExceptionHandler, ProblemDetail (RFC 7807) and global exception handling in Spring Boot')">
+        <div class="card-title">Exception handling</div>
+        <div class="tags"><span class="tag tag-must">must know</span></div>
+        <div class="topics">@ControllerAdvice · @ExceptionHandler ordering · ProblemDetail (Spring 6+) · custom error responses · validation errors formatting</div>
+      </div>
+      <div class="card" onclick="sendPrompt('Explain Bean Validation in Spring Boot: @Valid vs @Validated, custom validators, constraint groups')">
+        <div class="card-title">Validation</div>
+        <div class="tags"><span class="tag tag-must">must know</span></div>
+        <div class="topics">@NotNull/@Size/@Pattern etc. · @Valid vs @Validated · method-level validation · custom ConstraintValidator · constraint groups · cascaded validation</div>
+      </div>
+      <div class="card" onclick="sendPrompt('Explain WebClient vs RestTemplate vs RestClient in Spring Boot — differences and migration')">
+        <div class="card-title">HTTP clients</div>
+        <div class="tags"><span class="tag tag-must">must know</span></div>
+        <div class="topics">RestTemplate (maintenance mode) → RestClient (Boot 3.2) · WebClient (reactive) · OpenFeign (declarative) · timeout config · retry integration</div>
+      </div>
+      <div class="card" onclick="sendPrompt('Explain Spring WebFlux: Mono, Flux, router functions, backpressure — when to use over Spring MVC')">
+        <div class="card-title">WebFlux & reactive</div>
+        <div class="tags"><span class="tag tag-senior">senior</span></div>
+        <div class="topics">Mono/Flux operators · router functions · WebFilter · R2DBC · backpressure · event loop model · when NOT to use reactive · mixing blocking code pitfalls</div>
+      </div>
+      <div class="card" onclick="sendPrompt('Explain pagination, sorting, and filtering in Spring Data REST and Spring MVC APIs')">
+        <div class="card-title">Pagination & filtering</div>
+        <div class="tags"><span class="tag tag-common">common</span></div>
+        <div class="topics">Pageable/Page/Slice · sorting parameters · cursor-based pagination · Specification API for dynamic filtering · Spring Data REST defaults</div>
+      </div>
+      <div class="card" onclick="sendPrompt('Explain file upload and download handling in Spring Boot: multipart, streaming, large files')">
+        <div class="card-title">File handling</div>
+        <div class="tags"><span class="tag tag-common">common</span></div>
+        <div class="topics">MultipartFile · multipart config limits · streaming downloads (StreamingResponseBody) · S3 integration patterns · chunked transfer</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 4: Data & JPA -->
+  <div class="section" id="s4">
+    <div class="section-title">Data access & JPA</div>
+    <div class="section-desc">Databases, Hibernate, transactions — another deep interview zone</div>
+    <div class="grid">
+      <div class="card" onclick="sendPrompt('Explain Spring Data JPA repositories: CrudRepository vs JpaRepository, derived queries, JPQL, native queries')">
+        <div class="card-title">Spring Data repositories</div>
+        <div class="tags"><span class="tag tag-must">must know</span></div>
+        <div class="topics">CrudRepository vs JpaRepository vs PagingAndSortingRepository · derived query methods · @Query (JPQL/native) · Projections · @Modifying · custom repository implementations</div>
+      </div>
+      <div class="card" onclick="sendPrompt('Explain JPA entity lifecycle, persistence context, first-level cache, and entity states')">
+        <div class="card-title">Entity lifecycle & persistence context</div>
+        <div class="tags"><span class="tag tag-must">must know</span></div>
+        <div class="topics">Transient/managed/detached/removed states · persistence context as first-level cache · dirty checking · merge vs persist · clear/flush semantics</div>
+      </div>
+      <div class="card" onclick="sendPrompt('Explain JPA relationships: OneToMany, ManyToMany, fetch types, cascade types, orphanRemoval and best practices')">
+        <div class="card-title">JPA relationships</div>
+        <div class="tags"><span class="tag tag-must">must know</span></div>
+        <div class="topics">@OneToMany/@ManyToOne/@ManyToMany · FetchType.LAZY vs EAGER · cascade types · orphanRemoval · bidirectional sync · @JoinColumn vs @JoinTable</div>
+      </div>
+      <div class="card" onclick="sendPrompt('Explain the N+1 problem in Hibernate, how to detect it, and all the ways to fix it')">
+        <div class="card-title">N+1 problem & fixes</div>
+        <div class="tags"><span class="tag tag-must">must know</span></div>
+        <div class="topics">Root cause · detecting (Hypersistence, show_sql) · JOIN FETCH · @EntityGraph · batch fetching (@BatchSize) · DTO projections via JPQL</div>
+      </div>
+      <div class="card" onclick="sendPrompt('Explain @Transactional propagation types and isolation levels with real scenarios')">
+        <div class="card-title">Transaction management</div>
+        <div class="tags"><span class="tag tag-must">must know</span></div>
+        <div class="topics">Propagation (REQUIRED, REQUIRES_NEW, NESTED, SUPPORTS, NEVER) · isolation levels (READ_UNCOMMITTED → SERIALIZABLE) · rollbackFor · read-only transactions optimization</div>
+      </div>
+      <div class="card" onclick="sendPrompt('Explain Hibernate second-level cache: providers, regions, caching strategies, when to use')">
+        <div class="card-title">Second-level cache</div>
+        <div class="tags"><span class="tag tag-senior">senior</span></div>
+        <div class="topics">Ehcache/Caffeine/Redis as L2 provider · @Cache/@Cacheable regions · READ_ONLY/READ_WRITE/NONSTRICT_READ_WRITE · query cache · when L2 hurts</div>
+      </div>
+      <div class="card" onclick="sendPrompt('Explain optimistic vs pessimistic locking in JPA: @Version, LockModeType, deadlock prevention')">
+        <div class="card-title">Optimistic & pessimistic locking</div>
+        <div class="tags"><span class="tag tag-senior">senior</span></div>
+        <div class="topics">@Version (optimistic) · OptimisticLockException handling · LockModeType.PESSIMISTIC_WRITE · SELECT FOR UPDATE · when to use each</div>
+      </div>
+      <div class="card" onclick="sendPrompt('Explain HikariCP connection pool tuning: maxPoolSize, connectionTimeout, pool sizing formula')">
+        <div class="card-title">Connection pool (HikariCP)</div>
+        <div class="tags"><span class="tag tag-common">common</span></div>
+        <div class="topics">Pool sizing formula (CPU cores × 2 + spindle count) · maxPoolSize/minIdle/connectionTimeout/idleTimeout · pool exhaustion diagnosis · leakDetectionThreshold</div>
+      </div>
+      <div class="card" onclick="sendPrompt('Explain database migration with Flyway vs Liquibase: versioning, zero-downtime patterns, rollback strategy')">
+        <div class="card-title">Migrations (Flyway/Liquibase)</div>
+        <div class="tags"><span class="tag tag-common">common</span></div>
+        <div class="topics">Versioned vs repeatable scripts · naming conventions · zero-downtime patterns (add-then-remove) · Flyway vs Liquibase trade-offs · baseline on migrate</div>
+      </div>
+      <div class="card" onclick="sendPrompt('Explain Spring Data with Redis: caching, repositories, Pub/Sub, distributed locks, TTL strategies')">
+        <div class="card-title">Redis & caching</div>
+        <div class="tags"><span class="tag tag-common">common</span></div>
+        <div class="topics">@Cacheable/@CacheEvict/@CachePut · Spring Cache abstraction · Redis as cache (cache-aside, write-through) · distributed lock (Redisson) · serialization strategies</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 5: Security -->
+  <div class="section" id="s5">
+    <div class="section-title">Security</div>
+    <div class="section-desc">Spring Security, OAuth2, JWT — every production app needs this</div>
+    <div class="grid">
+      <div class="card" onclick="sendPrompt('Explain Spring Security filter chain, SecurityFilterChain, and how authentication and authorization flow works')">
+        <div class="card-title">Security filter chain</div>
+        <div class="tags"><span class="tag tag-must">must know</span></div>
+        <div class="topics">Filter ordering · UsernamePasswordAuthenticationFilter · SecurityContextHolder · AuthenticationManager → AuthenticationProvider → UserDetailsService</div>
+      </div>
+      <div class="card" onclick="sendPrompt('Explain OAuth2 authorization code flow, JWT structure, resource server setup in Spring Boot')">
+        <div class="card-title">OAuth2 & JWT</div>
+        <div class="tags"><span class="tag tag-must">must know</span></div>
+        <div class="topics">Grant types (auth code, client credentials, PKCE) · JWT header/payload/signature · JwtDecoder · resource server config · opaque tokens vs JWT</div>
+      </div>
+      <div class="card" onclick="sendPrompt('Explain method-level security in Spring: @PreAuthorize, @PostAuthorize, @Secured, SpEL expressions')">
+        <div class="card-title">Method-level security</div>
+        <div class="tags"><span class="tag tag-common">common</span></div>
+        <div class="topics">@EnableMethodSecurity · @PreAuthorize/@PostAuthorize SpEL · @Secured · role hierarchy · custom security expressions</div>
+      </div>
+      <div class="card" onclick="sendPrompt('Explain CSRF protection in Spring Security — when it matters and when to disable it for stateless APIs')">
+        <div class="card-title">CSRF & CORS</div>
+        <div class="tags"><span class="tag tag-common">common</span></div>
+        <div class="topics">CSRF tokens (session-based apps) · disabling CSRF for stateless JWT APIs · CORS configuration in Spring Security · @CrossOrigin vs global CORS config</div>
+      </div>
+      <div class="card" onclick="sendPrompt('How to propagate security context across microservices: token relay, mTLS, service accounts')">
+        <div class="card-title">Cross-service auth propagation</div>
+        <div class="tags"><span class="tag tag-senior">senior</span></div>
+        <div class="topics">JWT relay via Feign/WebClient interceptors · mTLS for service-to-service · client credentials grant · API gateway as auth boundary · SecurityContext propagation in async</div>
+      </div>
+      <div class="card" onclick="sendPrompt('Explain secrets management in Spring Boot: Vault, AWS Secrets Manager, environment variable best practices')">
+        <div class="card-title">Secrets management</div>
+        <div class="tags"><span class="tag tag-senior">senior</span></div>
+        <div class="topics">Never hardcode secrets · Spring Cloud Vault · AWS Secrets Manager integration · Kubernetes Secrets · dynamic secret rotation</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 6: Messaging -->
+  <div class="section" id="s6">
+    <div class="section-title">Messaging & async</div>
+    <div class="section-desc">Kafka, RabbitMQ, event-driven patterns</div>
+    <div class="grid">
+      <div class="card" onclick="sendPrompt('Explain Kafka fundamentals: topics, partitions, consumer groups, offsets, delivery guarantees')">
+        <div class="card-title">Kafka fundamentals</div>
+        <div class="tags"><span class="tag tag-must">must know</span></div>
+        <div class="topics">Topic/partition/replica · consumer group · offset commit strategies · at-most/at-least/exactly-once delivery · ISR · log compaction</div>
+      </div>
+      <div class="card" onclick="sendPrompt('Explain Spring Kafka: @KafkaListener, error handling, dead letter topics, idempotent producers, transactions')">
+        <div class="card-title">Spring Kafka</div>
+        <div class="tags"><span class="tag tag-must">must know</span></div>
+        <div class="topics">@KafkaListener config · manual vs auto ack · SeekToCurrentErrorHandler · dead letter topic (DLT) · idempotent producer · Kafka transactions</div>
+      </div>
+      <div class="card" onclick="sendPrompt('Explain RabbitMQ exchange types, bindings, message TTL, dead letter exchanges and Spring AMQP')">
+        <div class="card-title">RabbitMQ & Spring AMQP</div>
+        <div class="tags"><span class="tag tag-common">common</span></div>
+        <div class="topics">Direct/topic/fanout/headers exchange · DLX · message TTL · publisher confirms · @RabbitListener · retry with backoff</div>
+      </div>
+      <div class="card" onclick="sendPrompt('Explain event-driven architecture patterns: saga, outbox, event sourcing, CQRS')">
+        <div class="card-title">Event-driven patterns</div>
+        <div class="tags"><span class="tag tag-senior">senior</span></div>
+        <div class="topics">Transactional outbox pattern · CDC (Debezium) · saga (choreography vs orchestration) · event sourcing · CQRS read/write model separation</div>
+      </div>
+      <div class="card" onclick="sendPrompt('How to handle idempotent message consumers and avoid duplicate processing in event-driven systems?')">
+        <div class="card-title">Idempotency & deduplication</div>
+        <div class="tags"><span class="tag tag-senior">senior</span></div>
+        <div class="topics">Idempotency key in DB · deduplication table · message ID tracking · at-least-once + idempotent consumer = effectively-once · Redis-based dedup</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 7: Production -->
+  <div class="section" id="s7">
+    <div class="section-title">Testing, observability & deployment</div>
+    <div class="section-desc">What separates a developer from an engineer</div>
+    <div class="grid">
+      <div class="card" onclick="sendPrompt('Explain Spring Boot testing: @SpringBootTest, slice tests, MockMvc, Testcontainers, best practices')">
+        <div class="card-title">Testing strategy</div>
+        <div class="tags"><span class="tag tag-must">must know</span></div>
+        <div class="topics">Unit vs integration vs e2e · @SpringBootTest vs @WebMvcTest/@DataJpaTest/@JsonTest · MockMvc · Testcontainers · @MockBean vs @SpyBean · WireMock</div>
+      </div>
+      <div class="card" onclick="sendPrompt('Explain contract testing with Pact or Spring Cloud Contract — why it matters for microservices')">
+        <div class="card-title">Contract testing</div>
+        <div class="tags"><span class="tag tag-senior">senior</span></div>
+        <div class="topics">Consumer-driven contracts · Pact vs Spring Cloud Contract · stub runner · preventing integration breaks without full e2e tests</div>
+      </div>
+      <div class="card" onclick="sendPrompt('Explain Spring Boot Actuator, Micrometer metrics, and OpenTelemetry distributed tracing setup')">
+        <div class="card-title">Observability</div>
+        <div class="tags"><span class="tag tag-must">must know</span></div>
+        <div class="topics">Actuator endpoints (health, metrics, info, env) · custom health indicators · Micrometer (Counter/Gauge/Timer/DistributionSummary) · OTel traces · structured logging with MDC</div>
+      </div>
+      <div class="card" onclick="sendPrompt('Explain Spring Boot Docker deployment: layered JARs, multi-stage builds, buildpacks, image size optimization')">
+        <div class="card-title">Docker & containerization</div>
+        <div class="tags"><span class="tag tag-must">must know</span></div>
+        <div class="topics">Layered JAR (spring-boot:build-image) · multi-stage Dockerfile · distroless/alpine base images · JVM flags for containers (-XX:MaxRAMPercentage)</div>
+      </div>
+      <div class="card" onclick="sendPrompt('Explain Kubernetes deployment for Spring Boot: probes, ConfigMaps, graceful shutdown, resource limits, HPA')">
+        <div class="card-title">Kubernetes deployment</div>
+        <div class="tags"><span class="tag tag-senior">senior</span></div>
+        <div class="topics">Liveness vs readiness vs startup probes · K8s ConfigMaps/Secrets · graceful shutdown (SIGTERM handling) · resource requests/limits · HPA · rolling updates</div>
+      </div>
+      <div class="card" onclick="sendPrompt('Explain circuit breaker, retry, bulkhead and rate limiting with Resilience4j in Spring Boot')">
+        <div class="card-title">Resilience4j</div>
+        <div class="tags"><span class="tag tag-must">must know</span></div>
+        <div class="topics">CircuitBreaker states · RetryRegistry with exponential backoff · Bulkhead (thread pool isolation) · RateLimiter · @CircuitBreaker fallback · metrics integration</div>
+      </div>
+      <div class="card" onclick="sendPrompt('Explain performance profiling and tuning of Spring Boot apps: heap dumps, thread dumps, JFR, slow query logs')">
+        <div class="card-title">Performance profiling</div>
+        <div class="tags"><span class="tag tag-senior">senior</span></div>
+        <div class="topics">JVM heap/thread dumps (jmap/jstack) · Java Flight Recorder · async-profiler · slow query log · HikariCP pool stats · GC pause analysis</div>
+      </div>
+      <div class="card" onclick="sendPrompt('Explain CI/CD pipeline for a Spring Boot app: Maven lifecycle, Docker build, K8s deploy, blue-green vs canary')">
+        <div class="card-title">CI/CD & deployment strategies</div>
+        <div class="tags"><span class="tag tag-common">common</span></div>
+        <div class="topics">Maven/Gradle lifecycle phases · Surefire vs Failsafe plugins · blue-green deployment · canary releases · feature flags · GitOps with ArgoCD/Flux</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function show(n) {
+  document.querySelectorAll('.section').forEach((s,i)=>{ s.classList.toggle('active', i===n); });
+  document.querySelectorAll('.tab').forEach((t,i)=>{ t.classList.toggle('active', i===n); });
+}
+</script>
