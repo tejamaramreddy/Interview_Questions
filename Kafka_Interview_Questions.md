@@ -1,17 +1,100 @@
 ---
 
 # Kafka Fundamentals
+---
 
-1. What is Apache Kafka?
-2. What problem does Kafka solve?
-3. Why Kafka instead of RabbitMQ or ActiveMQ?
-4. Explain Kafka architecture.
-5. What are Brokers, Topics, Partitions, Producers, and Consumers?
-6. What is a Kafka cluster?
-7. What is the difference between a Topic and a Partition?
-8. Why are partitions important?
-9. What is an Offset?
-10. How are messages stored in Kafka?
+## 1. What is Apache Kafka?
+
+**Answer:**
+
+Apache Kafka is an open-source distributed event streaming platform that can be used either as a message queue or as a stream processing system. Kafka excels in delivering high performance, scalability, and durability. It's engineered to handle vast volumes of data in real-time, and when configured properly (with appropriate replication and acknowledgment settings), it can provide strong guarantees against message loss.
+
+---
+
+## 2. What problem does Kafka solve?
+
+**Answer:**
+
+Kafka solves the problem of reliable and scalable communication between distributed systems. It enables asynchronous communication, so services don't have to wait for each other. This reduces tight coupling between microservices and improves system resilience. Kafka can handle very high volumes of data while ensuring fault tolerance through replication. It also allows multiple consumers to process the same event independently and replay events when needed.
+
+---
+
+## 3. Why Kafka instead of RabbitMQ or ActiveMQ?
+
+**Answer:**
+
+| Kafka                               | RabbitMQ / ActiveMQ                        |
+| ----------------------------------- | ------------------------------------------ |
+| Event streaming platform            | Message broker                             |
+| Very high throughput                | Moderate throughput                        |
+| Stores messages for replay          | Deletes after acknowledgment               |
+| Horizontal scaling with partitions  | Scaling is more limited                    |
+| Best for event-driven microservices | Best for task queues and work distribution |
+
+---
+
+## 4. Explain Kafka architecture.
+
+**Answer:**
+
+A Kafka cluster is made up of multiple brokers. These are just individual servers (they can be physical or virtual). Each broker is responsible for storing data and serving clients. The more brokers you have, the more data you can store and the more clients you can serve.
+
+Each broker has a number of partitions. Each partition is an ordered, immutable sequence of messages that is continually appended to -- think of like a log file. Partitions are the way Kafka scales as they allow for messages to be consumed in parallel.
+
+A topic is just a logical grouping of partitions. Topics are the way you publish and subscribe to data in Kafka. When you publish a message, you publish it to a topic, and when you consume a message, you consume it from a topic. Topics are always multi-producer; that is, a topic can have zero, one, or many producers that write data to it.
+
+Last up we have our producers and consumers. Producers are the ones who write data to topics, and consumers are the ones who read data from topics. While Kafka exposes a simple API for both producers and consumers, the creation and processing of messages is on you, the developer. Kafka doesn't care what the data is, it just stores and serves it.
+
+---
+
+## 5. What are Brokers, Topics, Partitions, Producers, and Consumers?
+
+**Answer:**
+*(Look in architecture)*
+
+---
+
+## 6. What is a Kafka cluster?
+
+**Answer:**
+*(Look in architecture)*
+
+---
+
+## 7. What is the difference between a Topic and a Partition?
+
+**Answer:**
+
+A topic is a logical grouping of messages. A partition is a physical grouping of messages. A topic can have multiple partitions, and each partition can be on a different broker. Topics are just a way to organize your data, while partitions are a way to scale your data.
+
+---
+
+## 8. Why are partitions important?
+
+**Answer:**
+
+*(Look in architecture)*
+
+---
+
+## 9. What is an Offset?
+
+**Answer:**
+
+Each message in a Kafka partition is assigned a unique offset, which is a sequential identifier indicating the message’s position in the partition. This offset is used by consumers to track their progress in reading messages from the topic.
+
+As consumers read messages, they maintain their current offset and periodically commit this offset back to Kafka. This way, they can resume reading from where they left off in case of failure or restart.
+
+Note that Kafka provides at-least-once delivery by default: if a consumer crashes after processing a message but before committing its offset, the message will be reprocessed after restart. Exactly-once semantics are possible but require additional configuration (idempotent producers + transactional APIs).
+
+---
+
+## 10. How are messages stored in Kafka?
+
+**Answer:**
+
+Kafka stores messages in an append-only log inside topic partitions. Each partition is a sequence of immutable records where every new message is appended to the end of the log and assigned a unique offset.
+
 
 ---
 
