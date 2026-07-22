@@ -99,17 +99,174 @@ Kafka stores messages in an append-only log inside topic partitions. Each partit
 ---
 
 # Producer
+## 11. How does a Kafka producer work?
 
-11. How does a Kafka producer work?
-12. How does Kafka decide which partition to send a message to?
-13. What is the purpose of the message key?
-14. Explain `acks=0`, `acks=1`, and `acks=all`.
-15. What is an idempotent producer?
-16. How do retries work in Kafka?
-17. What problems can retries cause?
-18. What is batching in Kafka producers?
-19. What is producer compression?
-20. Which producer configurations do you use in production?
+When an event occurs in an application, the Kafka producer creates a message (also called a record) and sends it to a Kafka topic.
+
+A message consists of:
+
+* A value (payload)
+* An optional key
+* A timestamp
+* Optional headers
+
+The producer determines the target partition based on the message key. If no key is provided, Kafka uses its partitioning strategy to distribute messages across partitions.
+
+The producer batches records for efficiency, optionally compresses them, and sends them to the leader broker of the target partition.
+
+Based on the configured acknowledgment (`acks`) setting, the producer waits for confirmation before considering the message successfully written. If the acknowledgment is not received due to a transient failure, the producer can automatically retry sending the message.
+
+---
+
+## 12. How does Kafka decide which partition to send a message to?
+
+When a message is published to a Kafka topic, Kafka first determines the appropriate partition for the message. This partition selection is critical because it influences the distribution of data across the cluster.
+
+This is a two-step process:
+
+### Partition Determination
+
+Kafka uses a partitioning algorithm that hashes the message key to assign the message to a specific partition.
+
+If the message does not have a key, Kafka can either round-robin the message to partitions or follow another partitioning logic defined in the producer configuration.
+
+This ensures that messages with the same key always go to the same partition, preserving order at the partition level.
+
+### Broker Assignment
+
+Once the partition is determined, Kafka then identifies which broker holds that particular partition.
+
+The mapping of partitions to specific brokers is managed by the Kafka cluster metadata, which is maintained by the Kafka controller (a role within the broker cluster).
+
+The producer uses this metadata to send the message directly to the broker that hosts the target partition.
+
+---
+
+## 13. What is the purpose of the message key?
+
+---
+
+## 14. Explain `acks=0`, `acks=1`, and `acks=all`.
+
+The `acks` (acknowledgment) configuration determines how many Kafka brokers must acknowledge a message before the producer considers the send operation successful. It directly affects the trade-off between performance and reliability.
+
+### `acks=0`
+
+The producer does not wait for any acknowledgment from the broker.
+
+This provides the highest throughput and lowest latency, but messages can be lost if the broker is unavailable or the request fails.
+
+### `acks=1`
+
+The producer waits for an acknowledgment only from the leader broker after it writes the message to its local log.
+
+This offers a balance between performance and reliability, but if the leader fails before followers replicate the message, the data may be lost.
+
+### `acks=all` (or `acks=-1`)
+
+The producer waits until the leader and all in-sync replicas (ISR) acknowledge the message.
+
+This provides the highest durability and minimizes the risk of data loss, although it introduces slightly higher latency.
+
+---
+
+## 15. What is an idempotent producer?
+
+To avoid duplicate messages when retries are enabled. This just ensures that messages are only sent once in the case we incorrectly think they weren't sent.
+
+---
+
+## 16. How do retries work in Kafka?
+
+Kafka producers automatically retry sending a message if a send operation fails due to temporary issues such as network failures, broker unavailability, or request timeouts.
+
+The producer retries based on its retry configuration until the message is successfully acknowledged or the retry limit is reached.
+
+During a retry, the producer resends the same message to the leader broker.
+
+Without idempotence enabled, these retries can result in duplicate messages if the broker had already stored the original message but the acknowledgment was lost.
+
+To prevent this, we enable idempotent producers (`enable.idempotence=true`), which ensure that duplicate retries are ignored.
+
+---
+
+## 17. What problems can retries cause?
+
+Retries improve reliability by handling temporary failures, but they can introduce some challenges.
+
+The main problem is duplicate messages. If the producer sends a message successfully to the broker but the acknowledgment is lost due to a network issue, the producer may retry and the same message can be stored multiple times.
+
+Another issue is message ordering. If retries are configured with multiple in-flight requests, an earlier message might fail and be retried after a later message succeeds, causing messages to arrive out of order.
+
+To avoid these issues, we enable idempotent producers, configure appropriate retry settings, and limit the number of in-flight requests when ordering is critical.
+
+---
+
+## 18. What is batching in Kafka producers?
+
+Batching is a Kafka producer optimization where multiple messages are grouped together and sent to the broker in a single request instead of sending each message individually.
+
+This reduces network overhead and improves producer throughput.
+
+Kafka automatically batches messages based on configurations like `batch.size` and `linger.ms`.
+
+A larger batch size improves throughput, while a smaller batch size reduces latency.
+
+---
+
+## 19. What is producer compression?
+
+Producer compression is a feature where Kafka compresses messages before sending them to the broker.
+
+Compression reduces network bandwidth usage and disk storage requirements.
+
+Kafka compresses messages in batches rather than individually, making compression more efficient.
+
+Common compression algorithms supported by Kafka are:
+
+* gzip
+* snappy
+* lz4
+* zstd
+
+The choice depends on the trade-off between compression ratio and CPU usage.
+
+---
+
+## 20. Which producer configurations do you use in production?
+
+Some common producer configurations we use are:
+
+* `acks=all` to ensure messages are replicated successfully.
+* `enable.idempotence=true` to prevent duplicate messages during retries.
+* `retries` to handle temporary failures.
+* `compression.type=lz4` to reduce network and storage usage.
+* `batch.size` and `linger.ms` to improve throughput.
+* `delivery.timeout.ms` to control message delivery time.
+* `key.serializer` and `value.serializer` to convert objects into Kafka records.
+
+### Example Production Configuration
+
+```properties
+acks=all
+
+enable.idempotence=true
+
+retries=10
+
+compression.type=lz4
+
+batch.size=32768
+
+linger.ms=10
+
+delivery.timeout.ms=120000
+
+key.serializer=org.apache.kafka.common.serialization.StringSerializer
+
+value.serializer=org.springframework.kafka.support.serializer.JsonSerializer
+```
+
 
 ---
 
