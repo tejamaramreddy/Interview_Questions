@@ -272,16 +272,218 @@ value.serializer=org.springframework.kafka.support.serializer.JsonSerializer
 
 # Consumer
 
-21. What is a Kafka consumer?
-22. What is a Consumer Group?
-23. How does Kafka distribute partitions among consumers?
-24. What happens if you have more consumers than partitions?
-25. Explain Kafka offsets.
-26. Auto offset commit vs Manual offset commit.
-27. What is `commitSync()` vs `commitAsync()`?
-28. How do you replay messages?
-29. How do you avoid duplicate processing?
-30. How do you handle poison messages (bad messages)?
+## 21. What is a Kafka consumer?
+
+A Kafka consumer is an application that reads messages from one or more Kafka topics and processes them. Consumers subscribe to topics and continuously poll the Kafka broker for new records.
+
+Each message read by a consumer has an associated offset, which helps track the consumer's progress. After successfully processing messages, the consumer commits the offsets so that it can resume from the correct position after a restart.
+
+---
+
+## 22. What is a Consumer Group?
+
+A Consumer Group is a group of one or more consumers that work together to consume messages from a Kafka topic.
+
+Kafka distributes the partitions of a topic among the consumers in the same consumer group so that each partition is consumed by only one consumer within that group. This allows message processing to be parallelized while ensuring that each message is processed only once by the group.
+
+Different consumer groups can independently consume the same topic because each group maintains its own offsets.
+
+---
+
+## 23. How does Kafka distribute partitions among consumers?
+
+Kafka distributes partitions across consumers within the same consumer group.
+
+* Each partition is assigned to only one consumer in a consumer group.
+* A single consumer can be assigned multiple partitions.
+* Kafka automatically rebalances partition assignments whenever a consumer joins, leaves, or fails.
+
+For example, if a topic has 6 partitions and there are 3 consumers in the same group:
+
+```text
+Consumer 1 → Partitions 0, 1
+Consumer 2 → Partitions 2, 3
+Consumer 3 → Partitions 4, 5
+```
+
+This allows multiple consumers to process messages in parallel while maintaining message order within each partition.
+
+---
+
+## 24. What happens if you have more consumers than partitions?
+
+If there are more consumers than partitions, some consumers will remain idle because a partition can be assigned to only one consumer within a consumer group.
+
+For example:
+
+```text
+Topic Partitions = 3
+
+Consumers = 5
+
+Consumer 1 → Partition 0
+Consumer 2 → Partition 1
+Consumer 3 → Partition 2
+Consumer 4 → Idle
+Consumer 5 → Idle
+```
+
+To fully utilize all consumers, the number of partitions should be greater than or equal to the number of consumers in the consumer group.
+
+---
+
+## 25. Explain Kafka offsets.
+
+An offset is a unique sequential number assigned to each message within a partition. It identifies the position of a message in that partition.
+
+For example:
+
+```text
+Topic: orders
+Partition: 0
+
+Offset 0 → Order 101
+Offset 1 → Order 102
+Offset 2 → Order 103
+Offset 3 → Order 104
+```
+
+Consumers use offsets to keep track of which messages have already been processed.
+
+After successfully processing messages, the consumer commits the next offset. For example, after processing offsets 0, 1, and 2, it commits offset 3, indicating that the next message to consume starts from offset 3.
+
+Kafka stores committed offsets in the internal `__consumer_offsets` topic, allowing consumers to resume processing from the last committed position after a restart.
+
+## 26. Auto Offset Commit vs Manual Offset Commit
+
+Kafka consumers use offset commits to record which messages have been successfully processed.
+
+### Auto Offset Commit
+
+With auto offset commit enabled (`enable.auto.commit=true`), Kafka automatically commits offsets at a configured interval (`auto.commit.interval.ms`).
+
+**Advantages:**
+
+* Simple to configure.
+* Suitable for applications where occasional duplicate processing or message loss is acceptable.
+
+**Disadvantages:**
+
+* If the application crashes after the offset is committed but before the message is processed, the message may be lost.
+* Less control over when offsets are committed.
+
+### Manual Offset Commit
+
+With manual offset commit (`enable.auto.commit=false`), the application explicitly commits offsets only after successfully processing the messages.
+
+**Advantages:**
+
+* Better reliability.
+* Prevents message loss by committing offsets only after successful processing.
+* Gives the application full control over offset management.
+
+**Disadvantages:**
+
+* Slightly more implementation effort.
+* Incorrect commit logic can lead to duplicate processing.
+
+In production systems, manual offset commits are generally preferred for critical applications.
+
+---
+
+## 27. What is `commitSync()` vs `commitAsync()`?
+
+Both methods are used to commit consumer offsets manually.
+
+### `commitSync()`
+
+`commitSync()` sends the offset commit request and waits until Kafka confirms that the commit has completed.
+
+**Advantages:**
+
+* Reliable.
+* If the commit fails, the application can retry.
+* Ensures offsets are successfully committed before continuing.
+
+**Disadvantages:**
+
+* Blocks the consumer while waiting for the broker.
+* Slightly higher latency.
+
+### `commitAsync()`
+
+`commitAsync()` sends the commit request but does not wait for a response from Kafka.
+
+**Advantages:**
+
+* Non-blocking.
+* Higher throughput.
+* Better performance for high-volume consumers.
+
+**Disadvantages:**
+
+* Commit failures are not automatically retried.
+* An offset commit may fail silently if not handled through a callback.
+
+Generally:
+
+* Use `commitSync()` when reliability is more important.
+* Use `commitAsync()` when throughput is more important.
+* Some production applications use `commitAsync()` during normal processing and `commitSync()` during shutdown to ensure the final offsets are committed.
+
+---
+
+## 28. How do you replay messages?
+
+Replaying messages means consuming messages again from an earlier offset.
+
+There are several ways to replay messages:
+
+* Reset the consumer group's offsets to an earlier position.
+* Create a new consumer group, which starts reading the topic from the configured offset reset policy (`earliest` or `latest`).
+* Programmatically seek to a specific offset using the Kafka Consumer API (`seek()`).
+
+For example, if the consumer has committed offset 100 but you reset the offset to 80, the consumer will reprocess messages from offset 80 onward.
+
+Replay is commonly used for:
+
+* Bug fixes
+* Data recovery
+* Rebuilding downstream systems
+* Reprocessing historical events
+
+---
+
+## 29. How do you avoid duplicate processing?
+
+Kafka provides **at-least-once delivery**, so consumers should be designed to handle duplicate messages.
+
+Common approaches include:
+
+* Designing consumers to be **idempotent**, so processing the same message multiple times produces the same result.
+* Using a unique business identifier (such as `orderId` or `transactionId`) and checking whether it has already been processed.
+* Using database constraints (for example, unique keys) to prevent duplicate inserts.
+* Using Kafka transactions and exactly-once semantics where appropriate.
+
+Even if Kafka delivers the same message multiple times due to retries or consumer failures, the application should ensure the business operation is executed only once.
+
+---
+
+## 30. How do you handle poison messages (bad messages)?
+
+A poison message is a message that repeatedly fails processing due to reasons such as invalid data, deserialization errors, or business validation failures.
+
+If such messages are continuously retried, they can block the consumer from processing subsequent messages.
+
+A common production approach is:
+
+1. Retry processing a limited number of times.
+2. If the message still fails, publish it to a **Dead Letter Queue (DLQ)** or Dead Letter Topic (DLT).
+3. Commit the offset so that the consumer can continue processing other messages.
+4. Investigate and process the failed messages separately.
+
+This approach prevents a single bad message from blocking the entire consumer while preserving the failed message for later analysis and recovery.
+
 
 ---
 
