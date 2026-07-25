@@ -564,21 +564,88 @@ To prevent data loss, configure a **replication factor of at least 3**, set **ac
 **Answer:**
 Kafka Transactions allow multiple producer operations to be treated as a single atomic unit. Either all messages are committed or none are. This helps achieve **exactly-once semantics**, especially in stream processing applications where data is read, processed, and written back to Kafka.
 
+---
+
+## 41. Why is Kafka so fast?
+
+**Answer:**
+Kafka is fast because it uses **sequential disk writes**, which are much faster than random writes. It also relies on the operating system's **page cache**, uses a **zero-copy** mechanism to send data efficiently, batches messages, compresses data, and distributes work across multiple partitions for parallel processing.
 
 ---
 
-# Performance & Scaling
+## 42. How does Kafka achieve high throughput?
 
-41. Why is Kafka so fast?
-42. How does Kafka achieve high throughput?
-43. What causes Consumer Lag?
-44. How do you monitor Consumer Lag?
-45. What happens if consumers are slower than producers?
-46. How do you tune Kafka for high performance?
-47. How many partitions should a topic have?
-48. Can Kafka guarantee ordering?
-49. What happens if you increase the number of partitions?
-50. What metrics do you monitor in production?
+**Answer:**
+Kafka achieves high throughput through **partitioning**, **batching**, **compression**, and **sequential I/O**. Producers send messages in batches, partitions allow parallel reads and writes, and consumers in a consumer group process partitions concurrently, enabling Kafka to handle millions of messages per second.
+
+---
+
+## 43. What causes Consumer Lag?
+
+**Answer:**
+Consumer lag occurs when consumers process messages slower than producers generate them. Common causes include slow application logic, insufficient consumer instances, network latency, high message volume, or resource constraints like CPU and memory.
+
+---
+
+## 44. How do you monitor Consumer Lag?
+
+**Answer:**
+Consumer lag is monitored by comparing the **latest offset** in a partition with the **consumer's committed offset**. Tools such as **Kafka Exporter**, **Prometheus**, **Grafana**, **Confluent Control Center**, or the `kafka-consumer-groups.sh` command help track lag and identify slow consumers.
+
+---
+
+## 45. What happens if consumers are slower than producers?
+
+**Answer:**
+If consumers are slower than producers, **consumer lag increases** because messages accumulate in Kafka. Kafka retains these messages based on its retention policy, allowing consumers to catch up later. If the lag grows too large, consumers may fall behind or miss data after the retention period expires.
+
+---
+
+## 46. How do you tune Kafka for high performance?
+
+**Answer:**
+To improve Kafka performance, increase the **number of partitions** for parallelism, enable **compression**, use **batching**, configure `linger.ms` and `batch.size`, optimize replication settings, allocate sufficient CPU, memory, and disk, and use **SSDs** for better I/O performance.
+
+---
+
+## 47. How many partitions should a topic have?
+
+**Answer:**
+The number of partitions depends on the required **throughput** and **consumer parallelism**. A common guideline is to have at least as many partitions as the maximum number of consumer instances expected in a consumer group, while avoiding excessive partitions because they increase management overhead.
+
+---
+
+## 48. Can Kafka guarantee ordering?
+
+**Answer:**
+Yes, Kafka guarantees **message ordering within a partition**, but not across multiple partitions. To preserve the order of related messages, use the same **message key** so they are always written to the same partition.
+
+---
+
+## 49. What happens if you increase the number of partitions?
+
+**Answer:**
+Increasing partitions improves **parallelism** and **throughput**, allowing more consumers to process data simultaneously. However, it changes how keys are mapped to partitions, so ordering for existing keys may be affected unless carefully managed. It also increases metadata and management overhead.
+
+---
+
+## 50. What metrics do you monitor in production?
+
+**Answer:**
+In production, I monitor:
+
+* **Consumer lag**
+* **Broker CPU, memory, and disk usage**
+* **Under-replicated partitions**
+* **Offline partitions**
+* **Request latency**
+* **Producer and consumer throughput**
+* **ISR (In-Sync Replica) count**
+* **Network traffic**
+* **Message rates and error rates**
+
+These metrics help ensure Kafka remains healthy, performant, and highly available.
+
 
 ---
 
