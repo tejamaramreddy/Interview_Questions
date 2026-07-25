@@ -488,17 +488,82 @@ This approach prevents a single bad message from blocking the entire consumer wh
 ---
 
 # Reliability & Replication
+---
 
-31. What is a replication factor?
-32. Explain Leader and Follower replicas.
-33. What is ISR (In-Sync Replicas)?
-34. What happens when the leader broker fails?
-35. How does Kafka ensure fault tolerance?
-36. What is High Watermark?
-37. What happens if all replicas fail?
-38. How do you prevent data loss?
-39. Explain At-most-once, At-least-once, and Exactly-once delivery.
-40. What are Kafka Transactions?
+## 31. What is a Replication Factor?
+
+**Answer:**
+The **replication factor** is the number of copies of a partition that Kafka maintains across different brokers. For example, a replication factor of **3** means there is **1 leader replica and 2 follower replicas**. This provides fault tolerance because if one broker fails, one of the follower replicas can be promoted to leader without losing data.
+
+---
+
+## 32. Explain Leader and Follower Replicas.
+
+**Answer:**
+Kafka uses a **leader-follower replication model** for each partition.
+
+* The **Leader Replica** handles all read and write requests from producers and consumers.
+* The **Follower Replicas** continuously replicate data from the leader but do not serve client requests under normal circumstances.
+* If the leader fails, one of the **in-sync follower replicas** is promoted as the new leader, ensuring high availability.
+
+---
+
+## 33. What is ISR (In-Sync Replicas)?
+
+**Answer:**
+**ISR (In-Sync Replicas)** is the set of replicas that are fully synchronized with the leader. These replicas have successfully replicated all committed messages from the leader. If the leader fails, Kafka elects a new leader only from the ISR list to ensure no committed data is lost.
+
+---
+
+## 34. What happens when the Leader Broker fails?
+
+**Answer:**
+When the broker hosting the **leader replica** fails, the Kafka **controller** detects the failure and automatically elects a new leader from the **In-Sync Replicas (ISR)**. Producers and consumers are redirected to the new leader, allowing the partition to continue serving requests with minimal downtime. If no ISR is available, the partition becomes temporarily unavailable until a replica recovers.
+
+
+### 35. How does Kafka ensure fault tolerance?
+
+**Answer:**
+Kafka ensures fault tolerance by replicating each partition across multiple brokers. One broker acts as the **leader**, while others are **followers**. If the leader fails, one of the in-sync replicas (ISR) is automatically elected as the new leader, allowing producers and consumers to continue with minimal interruption.
+
+---
+
+### 36. What is High Watermark?
+
+**Answer:**
+The **High Watermark** is the highest offset that has been successfully replicated to all in-sync replicas (ISRs). Consumers can only read messages up to the High Watermark, ensuring they never consume unreplicated data that could be lost if the leader fails.
+
+---
+
+### 37. What happens if all replicas fail?
+
+**Answer:**
+If all replicas of a partition fail, Kafka cannot elect a new leader, making the partition temporarily unavailable. Once a replica comes back online, it can become the leader and resume serving requests. Proper replication and broker distribution reduce the chance of this happening.
+
+---
+
+### 38. How do you prevent data loss?
+
+**Answer:**
+To prevent data loss, configure a **replication factor of at least 3**, set **acks=all** so producers wait for all in-sync replicas to acknowledge writes, enable **idempotent producers**, and use **min.insync.replicas** to ensure writes succeed only when enough replicas are available.
+
+---
+
+### 39. Explain At-most-once, At-least-once, and Exactly-once delivery.
+
+**Answer:**
+
+* **At-most-once:** Messages may be lost, but they are never delivered more than once.
+* **At-least-once:** Messages are never lost, but duplicates may occur.
+* **Exactly-once:** Each message is processed only once with no loss or duplication. Kafka achieves this using **idempotent producers** and **transactions**.
+
+---
+
+### 40. What are Kafka Transactions?
+
+**Answer:**
+Kafka Transactions allow multiple producer operations to be treated as a single atomic unit. Either all messages are committed or none are. This helps achieve **exactly-once semantics**, especially in stream processing applications where data is read, processed, and written back to Kafka.
+
 
 ---
 
