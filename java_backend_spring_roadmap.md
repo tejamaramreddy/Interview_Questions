@@ -10,6 +10,12 @@
 
 interview questions evening or before going to bed
 
+. What the feature does
+. Why it exists
+. Where you've used it
+. When you would or wouldn't use it
+. What problems you've encountered
+
 ### Week 1 – Advanced Java
 
 **Day 1 – JVM Internals**
