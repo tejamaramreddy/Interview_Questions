@@ -1,5 +1,15 @@
 ## 30-Day Roadmap 
 
+9–10 AM: Revise previous day's topics
+
+10–12 PM: Learn theory
+
+12–1 PM: Break
+
+1–3 PM: Implement examples
+
+interview questions evening or before going to bed
+
 ### Week 1 – Advanced Java
 
 **Day 1 – JVM Internals**
