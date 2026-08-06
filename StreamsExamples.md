@@ -1,4 +1,4 @@
-For interviews (4–8 years experience), most Stream questions are based on a **List of Objects**, not primitive lists. Below are **15 additional interview-level examples** using an `Employee` list.
+For interviews, most Stream questions are based on a **List of Objects**, not primitive lists. Below are **15  interview-level examples** using an `Employee` list.
 
 ```java
 class Employee {
