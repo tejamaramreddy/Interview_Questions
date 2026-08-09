@@ -1,4 +1,4 @@
-Here is a structured, in-depth breakdown of the **CompletableFuture API in Java** based directly on the provided transcript, organized chapter-by-chapter.
+
 
 ---
 

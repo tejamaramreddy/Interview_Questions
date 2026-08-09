@@ -1,4 +1,4 @@
-In-depth breakdown of **Java Concurrency: Volatile, Synchronized, and Atomic Variables**,
+**Java Concurrency: Volatile, Synchronized, and Atomic Variables**
 
 ---
 
