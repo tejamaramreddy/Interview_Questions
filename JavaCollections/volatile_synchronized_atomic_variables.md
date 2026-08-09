@@ -1,4 +1,4 @@
-Here is a structured, in-depth breakdown of the transcript covering **Java Concurrency: Volatile, Synchronized, and Atomic Variables**, organized chapter-by-chapter.
+In-depth breakdown of **Java Concurrency: Volatile, Synchronized, and Atomic Variables**,
 
 ---
 
