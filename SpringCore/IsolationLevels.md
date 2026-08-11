@@ -4,13 +4,28 @@
 
 Isolation levels define how transactions are **isolated from each other**. When multiple transactions are running concurrently, the isolation level controls the degree to which one transaction’s operations are visible to others.
 
+## Get Yasiru Deshan’s stories in your inbox
+
+Join Medium for free to get updates from this writer.
+
+Subscribe
+
+Remember me for faster sign in
+
 Each isolation level strikes a balance between **data consistency** and **performance**, affecting the following:
 
 1. **Dirty Reads**: Reading uncommitted data from another transaction.
 2. **Non-repeatable Reads**: A value read by a transaction changes before the transaction finishes.
 3. **Phantom Reads**: New rows appear in a result set due to other transactions’ inserts.
 
-### The Four Isolation Levels in Spring:
+### The Four Isolation Levels in Spring
+
+| Isolation Level    | Dirty Reads | Non-repeatable Reads | Phantom Reads |
+| ------------------ | ----------- | -------------------- | ------------- |
+| `READ_UNCOMMITTED` | Allowed     | Allowed              | Allowed       |
+| `READ_COMMITTED`   | Prevented   | Allowed              | Allowed       |
+| `REPEATABLE_READ`  | Prevented   | Prevented            | Allowed       |
+| `SERIALIZABLE`     | Prevented   | Prevented            | Prevented     |
 
 ### **How Isolation Levels Work in Spring**
 
