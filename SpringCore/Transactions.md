@@ -120,16 +120,6 @@ Target Method
 
 `@Transactional` is typically placed on the **Service Layer**.
 
-```text
-Controller
-    ↓
-Service
-    ↓
-Repository
-    ↓
-Database
-```
-
 Example:
 
 ```java
