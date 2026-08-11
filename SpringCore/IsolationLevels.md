@@ -4,13 +4,6 @@
 
 Isolation levels define how transactions are **isolated from each other**. When multiple transactions are running concurrently, the isolation level controls the degree to which one transaction’s operations are visible to others.
 
-## Get Yasiru Deshan’s stories in your inbox
-
-Join Medium for free to get updates from this writer.
-
-Subscribe
-
-Remember me for faster sign in
 
 Each isolation level strikes a balance between **data consistency** and **performance**, affecting the following:
 
