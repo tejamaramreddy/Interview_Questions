@@ -5,6 +5,11 @@ In Spring, **Interceptors** and **Filters** are used to intercept HTTP requests 
 ---
 
 ## Interceptors
+
+* Interceptors are part of Spring’s HandlerInterceptor interface and can be applied specifically to handler methods (controllers).
+
+* They allow you to intercept the request before it reaches the controller, after the controller has processed the request, and after the response has been generated (but before sending to the client).
+
 * **Framework Level:** Part of Spring MVC's `HandlerInterceptor` interface.
 * **Scope:** Applied specifically to handler methods (controllers).
 * **Lifecycle Hooks:** They allow you to intercept the request:
@@ -15,6 +20,9 @@ In Spring, **Interceptors** and **Filters** are used to intercept HTTP requests 
 ---
 
 ## Filters
+
+* Filters, on the other hand, are part of the Servlet specification and are applied globally to every request.
+* They sit between the client and the servlet container, so they can handle requests before and after the whole servlet request processing.
 * **Servlet Level:** Part of the standard Java Servlet specification (`jakarta.servlet.Filter`).
 * **Scope:** Applied globally to every request before it even reaches the Spring `DispatcherServlet`.
 * **Lifecycle Hooks:** They sit between the client and the servlet container, allowing them to handle and transform requests and responses before and after the entire servlet request processing lifecycle.
