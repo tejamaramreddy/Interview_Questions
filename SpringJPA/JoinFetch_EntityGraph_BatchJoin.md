@@ -3,8 +3,7 @@
 ## 1. `JOIN FETCH`
 
 ### Interview answer
-
-> "`JOIN FETCH` is a JPQL feature that allows us to fetch an entity and its associated entities in the same database query. It's commonly used to solve the N+1 query problem."
+"`JOIN FETCH` is a JPQL feature that allows us to fetch an entity and its associated entities in the same database query. It's commonly used to solve the N+1 query problem."
 
 Example:
 
