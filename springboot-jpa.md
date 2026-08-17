@@ -168,14 +168,6 @@ The powerful persistence framework for Java applications, focused on productivit
 * Query Analysis
 * Spring Boot Actuator Metrics
 
-### Spring Boot Integration
-
-* Auto Configuration
-* Dependency Injection
-* Profiles
-* Configuration Properties
-* Actuator
-* Spring Security Integration
 
 ### Advanced Features
 
