@@ -1,5 +1,3 @@
----
-
 # Monoliths vs. Microservices
 
 ## Monolithic Architecture
